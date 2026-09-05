@@ -1,6 +1,7 @@
 //Aramburu Lucas
 //Comisión 3 Trabajo Practico N°1
 //08/26
+//Primero estuve trabajando en p5js web, por lo que al pasar el codigo a processing, tuve que cambiar algunas cosas.
 
 let framesIdle = [];
 let framesCaminar = [];
