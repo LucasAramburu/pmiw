@@ -21,19 +21,11 @@ const IMAGENES_BOXEO = [
   "assets/Fondos/Boxing4.png"
 ];
 const IMAGEN_PUNCH = "assets/Fondos/Punch.png";
+
 const GOLPES_PARA_TERMINAR = 100;
-const TIEMPO_BOXEO = 35;
+const TIEMPO_BOXEO = 20;
 const DURACION_PUNCH = 250;
 const DURACION_GOLPE = 150;
-let estadoActual = "INICIO";
-let imagenes = {};
-let musica = null;
-let audioActivado = false;
-let botonInicio;
-let botonCreditos;
-let pantallas = {};
-let minijuego;
-let creditos;
 
 const datosPantallas = {
   decisionEntrenamiento:
@@ -67,7 +59,7 @@ texto:
   instruccionesBoxeo:
 {
 texto:
-  "INSTRUCCIONES: Debes golpear 100 veces el saco en menos de 35 segundos, para ello alterna entre las letas A y D, si no llegás reinicia el intento con R.",
+  "INSTRUCCIONES: Debes golpear 100 veces el saco en menos de 20 segundos, para ello alterna entre las letras A y D, si no llegás reinicia el intento con R.",
   imagen:
   IMAGEN_GIMNASIO,
   opciones:
@@ -83,7 +75,7 @@ texto:
   finalVictoria:
 {
 texto:
-  "¡Turbo logró superar el entrenamiento!\nAunque aún le falta mucho entrenamiento por delante, ahora esta más cerca de estar lista para la carrera que se avecina!",
+  "¡Turbo logró superar el entrenamiento!\nAunque aún le falta mucho entrenamiento por delante, ahora está más cerca de estar lista para la carrera que se avecina!",
   imagen:
   IMAGEN_GIMNASIO,
   opciones:
@@ -127,6 +119,141 @@ const lineasCreditos = [
   "Gracias por jugar!!"
 ];
 
+const ARCHIVOS_IMAGEN = [
+  IMAGEN_PORTADA,
+  IMAGEN_CREDITOS,
+  IMAGEN_GIMNASIO,
+  IMAGEN_PUNCH,
+  ...IMAGENES_SACO,
+  ...IMAGENES_BOXEO,
+  ...Object.values(datosPantallas).map(p => p.imagen)
+];
+
+class Recursos {
+  static imagenes = {};
+  static musica = null;
+  static audioActivado = false;
+
+  static precargar() {
+    ARCHIVOS_IMAGEN.forEach(archivo => Recursos.cargarImagen(archivo));
+    Recursos.musica = loadSound(
+      ARCHIVO_MUSICA,
+      () => {
+    }
+    ,
+      () => {
+      Recursos.musica = null;
+    }
+    );
+  }
+
+  static cargarImagen(archivo) {
+    if (archivo && !(archivo in Recursos.imagenes)) {
+      Recursos.imagenes[archivo] = loadImage(
+        archivo,
+        () => {
+      }
+      ,
+        () => {
+        Recursos.imagenes[archivo] = null;
+      }
+      );
+    }
+  }
+
+  static configurarMusica() {
+    if (Recursos.musica) {
+      Recursos.musica.setVolume(VOLUMEN_MUSICA);
+    }
+  }
+
+  static activarMusica() {
+    if (Recursos.audioActivado) {
+      return;
+    }
+    Recursos.audioActivado = true;
+    userStartAudio();
+    if (Recursos.musica && !Recursos.musica.isPlaying()) {
+      Recursos.musica.loop();
+    }
+  }
+
+  static imagen(archivo) {
+    return Recursos.imagenes[archivo];
+  }
+
+  static dibujarFondo(archivo) {
+    let img = Recursos.imagen(archivo);
+    if (img) {
+      image(img, 0, 0, width, height);
+    } else {
+      background(30, 30, 50);
+      noStroke();
+      fill(130, 130, 170);
+      textAlign(CENTER, CENTER);
+      textSize(28);
+      text("ACÁ VA LA IMAGEN\n(" + archivo + ")", width / 2, height / 2);
+    }
+  }
+
+  static dibujarImagenCentrada(archivo, cx, cy, altoMax) {
+    let img = Recursos.imagen(archivo);
+    if (img) {
+      let escala = altoMax / img.height;
+      imageMode(CENTER);
+      image(img, cx, cy, img.width * escala, img.height * escala);
+      imageMode(CORNER);
+    } else {
+      noStroke();
+      fill(130, 130, 170);
+      textAlign(CENTER, CENTER);
+      textSize(14);
+      text("ACÁ VA LA IMAGEN\n(" + archivo + ")", cx, cy);
+    }
+  }
+}
+
+class Interfaz {
+  static vidrio(x, y, ancho, alto) {
+    fill(0, 0, 0, 120);
+    stroke(255, 255, 255, 70);
+    strokeWeight(1);
+    rect(x, y, ancho, alto, 12);
+  }
+
+  static escribirResaltado(contenido, x, y, ancho, alto, tamano) {
+    stroke(0);
+    strokeWeight(4);
+    strokeJoin(ROUND);
+    fill(255);
+    textStyle(BOLD);
+    textSize(tamano);
+    text(contenido, x, y, ancho, alto);
+    textStyle(NORMAL);
+    strokeWeight(1);
+  }
+
+  static barra(textoNarrativo, conAviso) {
+    Interfaz.vidrio(20, 275, width - 40, 105);
+    textAlign(LEFT, TOP);
+    Interfaz.escribirResaltado(textoNarrativo, 35, 283, width - 70, 72, 18);
+
+    if (conAviso) {
+      noStroke();
+      fill(255, 200, 60);
+      textAlign(RIGHT, TOP);
+      textSize(13);
+      text("Clic para continuar", width - 35, 358);
+    }
+  }
+
+  static titulo(textoTitulo) {
+    Interfaz.vidrio(20, 10, width - 40, 44);
+    textAlign(CENTER, CENTER);
+    Interfaz.escribirResaltado(textoTitulo, 35, 10, width - 70, 44, 18);
+  }
+}
+
 class Boton {
   constructor(x, y, ancho, alto, texto) {
     this.x = x;
@@ -166,19 +293,18 @@ class Pantalla {
     this.texto = datos.texto;
     this.imagen = datos.imagen;
     this.mostrarOpciones = false;
-    this.opciones = [];
 
     let posiciones = this.acomodar(datos.opciones.length);
-    for (let i = 0; i < datos.opciones.length; i++) {
+    this.opciones = datos.opciones.map((opcion, i) => {
       let p = posiciones[i];
-      this.opciones.push( {
+      return {
       boton:
-        new Boton(p.x, p.y, p.ancho, p.alto, datos.opciones[i].texto),
+        new Boton(p.x, p.y, p.ancho, p.alto, opcion.texto),
         siguiente:
-        datos.opciones[i].siguiente
-      }
-      );
+        opcion.siguiente
+      };
     }
+    );
   }
 
   acomodar(cantidad) {
@@ -247,18 +373,16 @@ class Pantalla {
   }
 
   dibujar() {
-    dibujarFondo(this.imagen);
+    Recursos.dibujarFondo(this.imagen);
 
     if (this.hayDecision() && !this.mostrarOpciones) {
-      dibujarBarra(this.texto, true);
+      Interfaz.barra(this.texto, true);
       return;
     }
     if (!this.hayDecision()) {
-      dibujarBarra(this.texto, false);
+      Interfaz.barra(this.texto, false);
     }
-    for (let i = 0; i < this.opciones.length; i++) {
-      this.opciones[i].boton.dibujar();
-    }
+    this.opciones.forEach(opcion => opcion.boton.dibujar());
   }
 
   clic() {
@@ -266,12 +390,8 @@ class Pantalla {
       this.mostrarOpciones = true;
       return null;
     }
-    for (let i = 0; i < this.opciones.length; i++) {
-      if (this.opciones[i].boton.clicSobre()) {
-        return this.opciones[i].siguiente;
-      }
-    }
-    return null;
+    let elegida = this.opciones.find(opcion => opcion.boton.clicSobre());
+    return elegida ? elegida.siguiente : null;
   }
 }
 
@@ -293,7 +413,7 @@ class EfectoPunch {
   }
 
   dibujar() {
-    let img = imagenes[IMAGEN_PUNCH];
+    let img = Recursos.imagen(IMAGEN_PUNCH);
     if (!img) {
       return;
     }
@@ -343,7 +463,7 @@ class Boxeador {
       pose = this.poseGolpe;
     }
     let posX = (pose === 2) ? this.xGolpe : this.x;
-    dibujarImagenCentrada(IMAGENES_BOXEO[pose], posX, this.y, this.alto);
+    Recursos.dibujarImagenCentrada(IMAGENES_BOXEO[pose], posX, this.y, this.alto);
   }
 }
 
@@ -359,10 +479,9 @@ class SacoBoxeo {
     if (!terminado && boxeador.estaGolpeando()) {
       indice = (boxeador.poseGolpe === 2) ? 1 : 2;
     }
-    dibujarImagenCentrada(IMAGENES_SACO[indice], this.x, this.y, this.alto);
+    Recursos.dibujarImagenCentrada(IMAGENES_SACO[indice], this.x, this.y, this.alto);
   }
 }
-
 class MinijuegoBoxeo {
   constructor() {
     this.boxeador = new Boxeador(300, 250, 270, 340);
@@ -427,19 +546,13 @@ class MinijuegoBoxeo {
       this.estado = "FALLO";
     }
 
-    dibujarFondo(IMAGEN_GIMNASIO);
+    Recursos.dibujarFondo(IMAGEN_GIMNASIO);
     this.saco.dibujar(this.boxeador, this.terminado());
     this.boxeador.dibujar(this.terminado());
+    this.efectos = this.efectos.filter(efecto => !efecto.estaTerminado());
+    this.efectos.forEach(efecto => efecto.dibujar());
 
-    for (let i = this.efectos.length - 1; i >= 0; i--) {
-      if (this.efectos[i].estaTerminado()) {
-        this.efectos.splice(i, 1);
-      } else {
-        this.efectos[i].dibujar();
-      }
-    }
-
-    dibujarTitulo("¡Entrenamiento de fuerza! Presiona A y D para golpear (R reinicia)");
+    Interfaz.titulo("¡Entrenamiento de fuerza! Presiona A y D para golpear (R reinicia)");
 
     noStroke();
     fill(255, 200, 60);
@@ -450,10 +563,10 @@ class MinijuegoBoxeo {
 
     if (this.estado === "FALLO") {
       textAlign(CENTER, CENTER);
-      escribirResaltado("¡Fallaste!", 0, 0, width, height, 64);
+      Interfaz.escribirResaltado("¡Fallaste!", 0, 0, width, height, 64);
     } else if (this.estado === "GANO") {
       textAlign(CENTER, CENTER);
-      escribirResaltado("¡Lo lograste!", 0, 0, width, height, 64);
+      Interfaz.escribirResaltado("¡Lo lograste!", 0, 0, width, height, 64);
     }
 
     if (this.terminado()) {
@@ -462,7 +575,6 @@ class MinijuegoBoxeo {
     }
   }
 }
-
 class Creditos {
   constructor(lineas, velocidad) {
     this.lineas = lineas;
@@ -478,7 +590,7 @@ class Creditos {
   }
 
   dibujar() {
-    dibujarFondo(IMAGEN_CREDITOS);
+    Recursos.dibujarFondo(IMAGEN_CREDITOS);
     noStroke();
     fill(0, 0, 0, 150);
     rect(0, 0, width, height);
@@ -494,9 +606,10 @@ class Creditos {
     if (this.terminado) {
       y = yFinal;
     }
-    for (let i = 0; i < this.lineas.length; i++) {
-      text(this.lineas[i], width / 2, y + i * separacion);
+    this.lineas.forEach((linea, i) => {
+      text(linea, width / 2, y + i * separacion);
     }
+    );
     if (this.terminado) {
       this.boton.dibujar();
     }
@@ -506,201 +619,106 @@ class Creditos {
     return this.terminado && this.boton.clicSobre();
   }
 }
+class Juego {
+  constructor() {
+    this.estado = "INICIO";
+    this.botonInicio = new Boton(300, 250, 200, 50, "COMENZAR");
+    this.botonCreditos = new Boton(300, 315, 200, 50, "CRÉDITOS");
+
+    this.pantallas = Object.fromEntries(
+      Object.entries(datosPantallas).map(([nombre, datos]) => [nombre, new Pantalla(datos)])
+      );
+    this.minijuego = new MinijuegoBoxeo();
+    this.creditos = new Creditos(lineasCreditos, 1.5);
+  }
+
+  irAPantalla(nombre) {
+    this.estado = nombre;
+    if (nombre === "CREDITOS") {
+      this.creditos.iniciar();
+    } else if (nombre === "MINIJUEGO_BOXEO") {
+      this.minijuego.reiniciar();
+    } else if (nombre in this.pantallas) {
+      this.pantallas[nombre].reiniciar();
+    }
+  }
+
+  dibujarInicio() {
+    Recursos.dibujarFondo(IMAGEN_PORTADA);
+    fill(255);
+    noStroke();
+    textAlign(CENTER, CENTER);
+    textSize(36);
+    text("TWIN TURBO RUN RUN!", width / 2, 110);
+    textSize(18);
+    text("(Entrenamiento de fuerza y estamina!)", width / 2, 150);
+    this.botonInicio.dibujar();
+    this.botonCreditos.dibujar();
+  }
+
+  dibujar() {
+    if (this.estado === "INICIO") {
+      this.dibujarInicio();
+    } else if (this.estado === "CREDITOS") {
+      this.creditos.dibujar();
+    } else if (this.estado === "MINIJUEGO_BOXEO") {
+      this.minijuego.dibujar();
+    } else {
+      this.pantallas[this.estado].dibujar();
+    }
+  }
+
+  clic() {
+    if (this.estado === "INICIO") {
+      if (this.botonInicio.clicSobre()) {
+        this.irAPantalla("decisionEntrenamiento");
+      } else if (this.botonCreditos.clicSobre()) {
+        this.irAPantalla("CREDITOS");
+      }
+    } else if (this.estado === "CREDITOS") {
+      if (this.creditos.clic()) {
+        this.irAPantalla("INICIO");
+      }
+    } else if (this.estado === "MINIJUEGO_BOXEO") {
+      let siguiente = this.minijuego.clic();
+      if (siguiente) {
+        this.irAPantalla(siguiente);
+      }
+    } else {
+      let siguiente = this.pantallas[this.estado].clic();
+      if (siguiente) {
+        this.irAPantalla(siguiente);
+      }
+    }
+  }
+
+  tecla(k) {
+    if (this.estado === "MINIJUEGO_BOXEO") {
+      this.minijuego.tecla(k);
+    }
+  }
+}
+let juego;
 
 function preload() {
-  cargarImagen(IMAGEN_PORTADA);
-  cargarImagen(IMAGEN_CREDITOS);
-  for (let nombre in datosPantallas) {
-    cargarImagen(datosPantallas[nombre].imagen);
-  }
-  cargarImagen(IMAGEN_GIMNASIO);
-  for (let i = 0; i < IMAGENES_SACO.length; i++) {
-    cargarImagen(IMAGENES_SACO[i]);
-  }
-  for (let i = 0; i < IMAGENES_BOXEO.length; i++) {
-    cargarImagen(IMAGENES_BOXEO[i]);
-  }
-  cargarImagen(IMAGEN_PUNCH);
-
-  musica = loadSound(ARCHIVO_MUSICA, () => {
-  }
-  , () => {
-    musica = null;
-  }
-  );
+  Recursos.precargar();
 }
 
 function setup() {
   createCanvas(800, 400);
-  if (musica) {
-    musica.setVolume(VOLUMEN_MUSICA);
-  }
-
-  botonInicio = new Boton(300, 250, 200, 50, "COMENZAR");
-  botonCreditos = new Boton(300, 315, 200, 50, "CRÉDITOS");
-
-  for (let nombre in datosPantallas) {
-    pantallas[nombre] = new Pantalla(datosPantallas[nombre]);
-  }
-  minijuego = new MinijuegoBoxeo();
-  creditos = new Creditos(lineasCreditos, 1.5);
+  Recursos.configurarMusica();
+  juego = new Juego();
 }
 
 function draw() {
-  if (estadoActual === "INICIO") {
-    dibujarInicio();
-  } else if (estadoActual === "CREDITOS") {
-    creditos.dibujar();
-  } else if (estadoActual === "MINIJUEGO_BOXEO") {
-    minijuego.dibujar();
-  } else {
-    pantallas[estadoActual].dibujar();
-  }
+  juego.dibujar();
 }
 
 function mousePressed() {
-  activarMusica();
-
-  if (estadoActual === "INICIO") {
-    if (botonInicio.clicSobre()) {
-      irAPantalla("decisionEntrenamiento");
-    } else if (botonCreditos.clicSobre()) {
-      irAPantalla("CREDITOS");
-    }
-  } else if (estadoActual === "CREDITOS") {
-    if (creditos.clic()) {
-      irAPantalla("INICIO");
-    }
-  } else if (estadoActual === "MINIJUEGO_BOXEO") {
-    let siguiente = minijuego.clic();
-    if (siguiente) {
-      irAPantalla(siguiente);
-    }
-  } else {
-    let siguiente = pantallas[estadoActual].clic();
-    if (siguiente) {
-      irAPantalla(siguiente);
-    }
-  }
+  Recursos.activarMusica();
+  juego.clic();
 }
 
 function keyPressed() {
-  if (estadoActual === "MINIJUEGO_BOXEO") {
-    minijuego.tecla(key.toLowerCase());
-  }
-}
-
-function irAPantalla(nombre) {
-  estadoActual = nombre;
-  if (nombre === "CREDITOS") {
-    creditos.iniciar();
-  } else if (nombre === "MINIJUEGO_BOXEO") {
-    minijuego.reiniciar();
-  } else if (nombre in pantallas) {
-    pantallas[nombre].reiniciar();
-  }
-}
-
-function cargarImagen(archivo) {
-  if (archivo && !(archivo in imagenes)) {
-    imagenes[archivo] = loadImage(archivo, () => {
-    }
-    , () => {
-      imagenes[archivo] = null;
-    }
-    );
-  }
-}
-
-function activarMusica() {
-  if (audioActivado) {
-    return;
-  }
-  audioActivado = true;
-  userStartAudio();
-  if (musica && !musica.isPlaying()) {
-    musica.loop();
-  }
-}
-
-function dibujarFondo(archivo) {
-  let img = imagenes[archivo];
-  if (img) {
-    image(img, 0, 0, width, height);
-  } else {
-    background(30, 30, 50);
-    noStroke();
-    fill(130, 130, 170);
-    textAlign(CENTER, CENTER);
-    textSize(28);
-    text("ACÁ VA LA IMAGEN\n(" + archivo + ")", width / 2, height / 2);
-  }
-}
-
-function dibujarImagenCentrada(archivo, cx, cy, altoMax) {
-  let img = imagenes[archivo];
-  if (img) {
-    let escala = altoMax / img.height;
-    imageMode(CENTER);
-    image(img, cx, cy, img.width * escala, img.height * escala);
-    imageMode(CORNER);
-  } else {
-    noStroke();
-    fill(130, 130, 170);
-    textAlign(CENTER, CENTER);
-    textSize(14);
-    text("ACÁ VA LA IMAGEN\n(" + archivo + ")", cx, cy);
-  }
-}
-
-function dibujarInicio() {
-  dibujarFondo(IMAGEN_PORTADA);
-  fill(255);
-  noStroke();
-  textAlign(CENTER, CENTER);
-  textSize(36);
-  text("TWIN TURBO RUN RUN!", width / 2, 110);
-  textSize(18);
-  text("(Entrenamiento de fuerza y estamina!)", width / 2, 150, );
-  botonInicio.dibujar();
-  botonCreditos.dibujar();
-}
-
-function dibujarVidrio(x, y, ancho, alto) {
-  fill(0, 0, 0, 120);
-  stroke(255, 255, 255, 70);
-  strokeWeight(1);
-  rect(x, y, ancho, alto, 12);
-}
-
-function escribirResaltado(contenido, x, y, ancho, alto, tamano) {
-  stroke(0);
-  strokeWeight(4);
-  strokeJoin(ROUND);
-  fill(255);
-  textStyle(BOLD);
-  textSize(tamano);
-  text(contenido, x, y, ancho, alto);
-  textStyle(NORMAL);
-  strokeWeight(1);
-}
-
-function dibujarBarra(textoNarrativo, conAviso) {
-  dibujarVidrio(20, 275, width - 40, 105);
-  textAlign(LEFT, TOP);
-  escribirResaltado(textoNarrativo, 35, 283, width - 70, 72, 18);
-
-  if (conAviso) {
-    noStroke();
-    fill(255, 200, 60);
-    textAlign(RIGHT, TOP);
-    textSize(13);
-    text("Clic para continuar", width - 35, 358);
-  }
-}
-
-function dibujarTitulo(textoTitulo) {
-  dibujarVidrio(20, 10, width - 40, 44);
-  textAlign(CENTER, CENTER);
-  escribirResaltado(textoTitulo, 35, 10, width - 70, 44, 18);
+  juego.tecla(key.toLowerCase());
 }
