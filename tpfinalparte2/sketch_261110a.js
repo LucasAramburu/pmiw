@@ -1,6 +1,7 @@
 // Trabajo Practico Final parte #2, Acevedo Maximo - Aramburu Lucas
 // Com 3
 // Minijuego de boxeo con Programacion orientada a objetos
+// video explicativo de youtube https://youtu.be/o_1qy2-JCKg
 
 const IMAGEN_PORTADA = "assets/Fondos/AparezcoEnLaPortada.png";
 const IMAGEN_CREDITOS = "assets/Fondos/Hipodromo.png";
