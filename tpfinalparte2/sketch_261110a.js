@@ -4,10 +4,8 @@
 
 const IMAGEN_PORTADA = "assets/Fondos/AparezcoEnLaPortada.png";
 const IMAGEN_CREDITOS = "assets/Fondos/Hipodromo.png";
-
 const ARCHIVO_MUSICA = "assets/Musica/UmaMusumeSong.mp3";
 const VOLUMEN_MUSICA = 0.5;
-
 const IMAGEN_GIMNASIO = "assets/Fondos/Gimnasio.png";
 const IMAGENES_SACO = [
   "assets/Fondos/SacoBox0.png",
@@ -21,12 +19,10 @@ const IMAGENES_BOXEO = [
   "assets/Fondos/Boxing4.png"
 ];
 const IMAGEN_PUNCH = "assets/Fondos/Punch.png";
-
 const GOLPES_PARA_TERMINAR = 100;
 const TIEMPO_BOXEO = 20;
 const DURACION_PUNCH = 250;
 const DURACION_GOLPE = 150;
-
 const datosPantallas = {
   decisionEntrenamiento:
 {
