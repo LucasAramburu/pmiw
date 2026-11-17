@@ -1,0 +1,195 @@
+/* utilizando colores rojos, negros y grises, quise darle un aspecto en base a mis gustos personales */
+body {
+    margin: 0;
+    padding: 0 1rem;
+    background-color: #1a1a1a;
+    color: #ffffff;
+    font-family: "Nunito", sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    text-align: center;
+}
+h1,
+h2,
+h3 {
+    font-family: "Metal Mania", system-ui;
+    font-weight: 400;
+    letter-spacing: 1px;
+    line-height: 1.2;
+    color: #ff1f2d;
+}
+h1 {
+    font-size: 2.8rem;
+    margin: 1rem 0 0.25rem;
+}
+header {
+    padding: 1rem 0;
+    border-bottom: 3px solid #800020;
+}
+header nav ul {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+}
+header nav ul li {
+    display: inline-block;
+}
+header nav ul li a {
+    display: block;
+    padding: 0.5rem 1rem;
+    background-color: #800020;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+header nav ul li a:hover {
+    background-color: #ff1f2d;
+    transform: translateY(-2px);
+}
+main {
+    max-width: 900px;
+    margin: 0 auto;
+}
+main section h2 {
+    font-size: 2.2rem;
+    margin-top: 1.5rem;
+}
+main section > article > h3 {
+    font-size: 1.8rem;
+}
+p,
+blockquote {
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+blockquote {
+    padding: 0.5rem 1.25rem;
+    background-color: #2b2b2b;
+    border-left: 5px solid #ff1f2d;
+    border-radius: 6px;
+    text-align: left;
+}
+main ul {
+    list-style-position: inside;
+    margin: 1rem 0;
+    padding: 0;
+}
+figure {
+    margin: 1rem auto;
+}
+figure img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+    border: 3px solid #800020;
+    border-radius: 8px;
+    box-shadow: 5px 5px 0 #800020;
+}
+figcaption {
+    margin-top: 0.75rem;
+}
+.tarjeta {
+    margin: 1.5rem 0;
+    padding: 1.25rem;
+    background-color: #242424;
+    border: 3px solid #800020;
+    border-radius: 12px;
+    box-shadow: 6px 6px 0 #800020;
+}
+ .destacado {
+    color: #ff4d5a;
+    font-weight: 800;
+}
+.boton-volver,
+.boton-descarga {
+    display: inline-block;
+    margin: 1rem 0;
+    padding: 0.5rem 1.25rem;
+    background-color: #800020;
+    color: #ffffff;
+    font-weight: 800;
+    text-decoration: none;
+    border: 2px solid #ff1f2d;
+    border-radius: 999px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.boton-volver:hover,
+.boton-descarga:hover {
+    background-color: #ff1f2d;
+    transform: scale(1.05);
+}
+main li a {
+    color: #ff4d5a;
+    font-weight: 700;
+}
+main li a:hover {
+    color: #ffffff;
+    text-decoration: underline wavy;
+}
+details {
+    margin-top: 1rem;
+}
+ 
+summary {
+    cursor: pointer;
+    font-weight: 800;
+    color: #ff4d5a;
+}
+footer {
+    margin-top: 2rem;
+    padding: 1rem 0;
+    border-top: 3px solid #800020;
+}
+ @media (max-width: 800px) {
+    h1 {
+        font-size: 2.2rem;
+    }
+    main section h2 {
+        font-size: 1.9rem;
+    }
+}
+@media (max-width: 600px) {
+    body {
+        padding: 0 0.5rem;
+        font-size: 1rem;
+    }
+    h1 {
+        font-size: 1.8rem;
+    }
+    main section h2 {
+        font-size: 1.6rem;
+    }
+    main section > article > h3 {
+        font-size: 1.4rem;
+    }
+    header nav ul {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+    }
+    .tarjeta {
+        padding: 0.75rem;
+        box-shadow: 3px 3px 0 #800020;
+    }
+    blockquote {
+        padding: 0.5rem 0.75rem;
+    }
+    .boton-volver,
+    .boton-descarga {
+        display: block;
+    }
+    #juego iframe {
+    display: block;
+    margin: 1rem auto;
+    max-width: 100%;
+    border: 3px solid #800020;
+    border-radius: 8px;
+    box-shadow: 5px 5px 0 #800020;
+}
+}
