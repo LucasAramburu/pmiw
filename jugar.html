@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jugar · Twin Turbo</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+  <link href="css/styles.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Marcos laterales decorativos -->
+  <div class="marco-lateral izq" aria-hidden="true"></div>
+  <div class="marco-lateral der" aria-hidden="true"></div>
+
+  <div class="contenido">
+    <div class="wrap">
+
+      <!-- Banner -->
+      <header class="banner" role="banner">
+        <div class="titulo">
+          <h1>Twin Turbo</h1>
+          <p>Entrená con Twin Turbo</p>
+        </div>
+      </header>
+
+      <!-- Navegación (Bootstrap navbar + botones con marco) -->
+      <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid justify-content-center">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu"
+                  aria-controls="menu" aria-expanded="false" aria-label="Abrir menú">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="menu">
+            <div class="navbar-nav nav-botones flex-lg-row align-items-center">
+              <a class="btn-marco" href="index.html">Inicio</a>
+              <a class="btn-marco" href="proceso.html">Proceso y equipo</a>
+              <a class="btn-marco" href="jugar.html">Jugar</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <main>
+
+        <!-- ============ JUGAR ============ -->
+        <section class="panel">
+          <h2>¡A jugar!</h2>
+          <!-- Proporción 800x400: alto = 50% del ancho -->
+          <div class="pantalla-juego ratio" style="--bs-aspect-ratio: 50%;">
+            <iframe src="juego/index.html" title="Juego de Twin Turbo" allow="autoplay" allowfullscreen></iframe>
+          </div>
+          <p class="mt-3 mb-0">
+            <strong>Controles:</strong> usá el clic para avanzar y elegir opciones. En el boxeo, alterná las teclas A y D para golpear y presioná R para reiniciar.
+            ¿No carga? <a class="link-warning" href="juego/index.html" target="_blank" rel="noopener">Abrilo en una pestaña nueva</a>.
+          </p>
+        </section>
+
+      </main>
+
+      <footer class="pie">
+        <p>Trabajo Práctico N°3 Final · Diseño Multimedial · Hecho por Aramburu Goat y Chite Crack.</p>
+      </footer>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

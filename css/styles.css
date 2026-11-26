@@ -1,0 +1,233 @@
+/* =========================================================
+   Twin Turbo · estilos propios (encima de Bootstrap 5)
+   ========================================================= */
+
+:root {
+  --azul: #0a3fd0;
+  --azul-oscuro: #06267f;
+  --celeste: #2fb5ff;
+  --celeste-claro: #bfeaff;
+  --sakura: #ffc1da;
+  --dorado: #f5c542;
+  --blanco: #ffffff;
+  --side-w: clamp(90px, 13vw, 200px); /* ancho de los marcos laterales */
+}
+
+/* ---------- Fondo: azul con rayas diagonales y cuadros de largada ---------- */
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: "Nunito", system-ui, sans-serif;
+  color: var(--blanco);
+  background-color: var(--azul);
+  background-image:
+    repeating-linear-gradient(135deg, rgba(47, 181, 255, .22) 0 38px, transparent 38px 96px),
+    conic-gradient(rgba(255, 255, 255, .06) 25%, transparent 0 50%, rgba(255, 255, 255, .06) 0 75%, transparent 0),
+    linear-gradient(180deg, #0a3fd0 0%, #072fa0 100%);
+  background-size: auto, 90px 90px, auto;
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4, .navbar-brand, .btn-marco {
+  font-family: "Fredoka", "Nunito", sans-serif;
+}
+
+/* ---------- Marcos laterales fijos ---------- */
+.marco-lateral {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: var(--side-w);
+  background: url("../img/marcos-laterales.png") center top / cover no-repeat;
+  z-index: 5;
+  pointer-events: none;
+  filter: drop-shadow(0 0 14px rgba(0, 0, 40, .55));
+}
+.marco-lateral.izq { left: 0; }
+.marco-lateral.der { right: 0; }
+
+/* ---------- Contenido central ---------- */
+.contenido {
+  padding: 0 calc(var(--side-w) + 14px) 3rem;
+  position: relative;
+  z-index: 10;
+}
+.contenido > .wrap { max-width: 1000px; margin: 0 auto; }
+
+/* ---------- Banner ---------- */
+.banner {
+  position: relative;
+  margin-top: 1rem;
+  border-radius: 14px;
+  overflow: hidden;
+  aspect-ratio: 1400 / 362;
+  background: url("../img/banner.png") center / cover no-repeat;
+  box-shadow: 0 8px 28px rgba(0, 0, 40, .5);
+}
+.banner .titulo {
+  position: absolute;
+  inset: auto 0 6% 0;
+  text-align: center;
+  padding: 0 1rem;
+}
+.banner h1 {
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(1.6rem, 5vw, 3.6rem);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--blanco);
+  text-shadow: 0 3px 0 var(--azul), 0 0 18px rgba(0, 40, 160, .9), 0 0 6px var(--azul-oscuro);
+}
+.banner p {
+  margin: .1rem 0 0;
+  font-weight: 800;
+  color: var(--dorado);
+  font-size: clamp(.8rem, 2vw, 1.2rem);
+  text-shadow: 0 2px 6px var(--azul-oscuro), 0 0 10px var(--azul-oscuro);
+}
+
+/* ---------- Botones con marco (navbar y CTAs) ---------- */
+.navbar { padding: .9rem 0 .4rem; }
+.navbar-toggler {
+  border: 2px solid var(--celeste-claro);
+  background: rgba(6, 38, 127, .7);
+}
+.nav-botones { gap: .4rem; justify-content: center; width: 100%; }
+
+.btn-marco {
+  display: inline-block;
+  background: url("../img/marco-boton.png") center / 100% 100% no-repeat;
+  border: 0;
+  color: var(--blanco) !important;
+  font-weight: 600;
+  font-size: 1.15rem;
+  text-align: center;
+  text-decoration: none;
+  padding: 1rem 2.4rem;
+  min-width: 200px;
+  text-shadow: 0 2px 4px var(--azul-oscuro);
+  transition: transform .18s ease, filter .18s ease, color .18s ease;
+}
+.btn-marco:hover,
+.btn-marco:focus-visible {
+  transform: translateY(-4px) scale(1.05);
+  filter: brightness(1.2) drop-shadow(0 0 12px var(--celeste));
+  color: var(--dorado) !important;
+}
+.btn-marco:active { transform: translateY(0) scale(.98); }
+.btn-marco.activo { color: var(--dorado) !important; filter: drop-shadow(0 0 8px var(--dorado)); }
+.btn-marco.grande { font-size: 1.5rem; padding: 1.4rem 3.2rem; min-width: 280px; }
+
+/* ---------- Paneles / tarjetas ---------- */
+.panel {
+  background: rgba(6, 38, 127, .78);
+  border: 3px solid var(--blanco);
+  outline: 3px solid var(--celeste);
+  outline-offset: -9px;
+  border-radius: 10px;
+  padding: 1.6rem 1.8rem;
+  margin-top: 1.6rem;
+  backdrop-filter: blur(3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 40, .45);
+}
+.panel h2 {
+  color: var(--dorado);
+  font-weight: 700;
+  margin-bottom: .8rem;
+  text-shadow: 0 2px 0 var(--azul-oscuro);
+}
+.panel h2::before { content: "★ "; color: var(--celeste-claro); }
+.panel p, .panel li { line-height: 1.65; }
+
+.placeholder-img {
+  display: grid;
+  place-items: center;
+  min-height: 200px;
+  border: 2px dashed var(--celeste-claro);
+  border-radius: 8px;
+  color: var(--celeste-claro);
+  background: rgba(255, 255, 255, .06);
+  text-align: center;
+  padding: 1rem;
+}
+
+/* ---------- Equipo ---------- */
+.integrante { text-align: center; }
+.avatar {
+  width: 120px; height: 120px;
+  margin: 0 auto .8rem;
+  border-radius: 50%;
+  border: 4px solid var(--dorado);
+  background: linear-gradient(135deg, var(--celeste), var(--azul));
+  display: grid; place-items: center;
+  font-size: 2.6rem;
+  overflow: hidden;
+  transition: transform .25s ease;
+}
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+.integrante:hover .avatar { transform: rotate(-6deg) scale(1.08); }
+.integrante h3 { color: var(--sakura); margin: 0; }
+
+/* ---------- Acordeón del proceso ---------- */
+.accordion { --bs-accordion-bg: transparent; --bs-accordion-border-color: var(--celeste); }
+.accordion-item { background: rgba(255, 255, 255, .06); color: var(--blanco); border-color: var(--celeste); }
+.accordion-button {
+  background: rgba(10, 63, 208, .85);
+  color: var(--blanco);
+  font-family: "Fredoka", sans-serif;
+  font-size: 1.1rem;
+}
+.accordion-button:not(.collapsed) { background: var(--celeste); color: var(--azul-oscuro); box-shadow: none; }
+.accordion-button::after { filter: invert(1); }
+.accordion-button:not(.collapsed)::after { filter: none; }
+
+/* ---------- Pantalla de juego ---------- */
+.pantalla-juego {
+  border: 4px solid var(--dorado);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 0 24px rgba(245, 197, 66, .45);
+}
+.pantalla-juego iframe { border: 0; width: 100%; height: 100%; }
+
+/* ---------- Footer ---------- */
+footer.pie {
+  margin-top: 2rem;
+  text-align: center;
+  color: var(--celeste-claro);
+  font-size: .95rem;
+}
+footer.pie span { color: var(--sakura); }
+
+/* ---------- Pétalos de sakura (JS) ---------- */
+.petalo {
+  position: fixed;
+  top: -30px;
+  z-index: 20;
+  pointer-events: none;
+  background: radial-gradient(circle at 30% 30%, #fff 0%, var(--sakura) 60%, #ff9ec4 100%);
+  border-radius: 80% 0 80% 0;
+  opacity: .85;
+  animation: caer linear infinite;
+}
+@keyframes caer {
+  0%   { transform: translate3d(0, -5vh, 0) rotate(0deg); }
+  50%  { transform: translate3d(60px, 55vh, 0) rotate(180deg); }
+  100% { transform: translate3d(-30px, 108vh, 0) rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+
+  html { scroll-behavior: auto; }
+  .btn-marco, .avatar { transition: none; }
+}
+
+/* ---------- Responsive: en pantallas chicas se ocultan los marcos ---------- */
+@media (max-width: 991.98px) {
+  .marco-lateral { display: none; }
+  .contenido { padding: 0 12px 2rem; }
+  .btn-marco { min-width: 0; width: 100%; max-width: 320px; }
+  .navbar-collapse { text-align: center; padding-top: .6rem; }
+}
