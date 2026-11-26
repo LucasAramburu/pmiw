@@ -1,7 +1,3 @@
-/* =========================================================
-   Twin Turbo · estilos propios (encima de Bootstrap 5)
-   ========================================================= */
-
 :root {
   --azul: #0a3fd0;
   --azul-oscuro: #06267f;
@@ -10,12 +6,9 @@
   --sakura: #ffc1da;
   --dorado: #f5c542;
   --blanco: #ffffff;
-  --side-w: clamp(90px, 13vw, 200px); /* ancho de los marcos laterales */
+  --side-w: clamp(90px, 13vw, 200px);
 }
-
-/* ---------- Fondo: azul con rayas diagonales y cuadros de largada ---------- */
 html { scroll-behavior: smooth; }
-
 body {
   font-family: "Nunito", system-ui, sans-serif;
   color: var(--blanco);
@@ -32,8 +25,6 @@ body {
 h1, h2, h3, h4, .navbar-brand, .btn-marco {
   font-family: "Fredoka", "Nunito", sans-serif;
 }
-
-/* ---------- Marcos laterales fijos ---------- */
 .marco-lateral {
   position: fixed;
   top: 0;
@@ -46,16 +37,12 @@ h1, h2, h3, h4, .navbar-brand, .btn-marco {
 }
 .marco-lateral.izq { left: 0; }
 .marco-lateral.der { right: 0; }
-
-/* ---------- Contenido central ---------- */
 .contenido {
   padding: 0 calc(var(--side-w) + 14px) 3rem;
   position: relative;
   z-index: 10;
 }
 .contenido > .wrap { max-width: 1000px; margin: 0 auto; }
-
-/* ---------- Banner ---------- */
 .banner {
   position: relative;
   margin-top: 1rem;
@@ -87,8 +74,6 @@ h1, h2, h3, h4, .navbar-brand, .btn-marco {
   font-size: clamp(.8rem, 2vw, 1.2rem);
   text-shadow: 0 2px 6px var(--azul-oscuro), 0 0 10px var(--azul-oscuro);
 }
-
-/* ---------- Botones con marco (navbar y CTAs) ---------- */
 .navbar { padding: .9rem 0 .4rem; }
 .navbar-toggler {
   border: 2px solid var(--celeste-claro);
@@ -119,8 +104,6 @@ h1, h2, h3, h4, .navbar-brand, .btn-marco {
 .btn-marco:active { transform: translateY(0) scale(.98); }
 .btn-marco.activo { color: var(--dorado) !important; filter: drop-shadow(0 0 8px var(--dorado)); }
 .btn-marco.grande { font-size: 1.5rem; padding: 1.4rem 3.2rem; min-width: 280px; }
-
-/* ---------- Paneles / tarjetas ---------- */
 .panel {
   background: rgba(6, 38, 127, .78);
   border: 3px solid var(--blanco);
@@ -152,8 +135,6 @@ h1, h2, h3, h4, .navbar-brand, .btn-marco {
   text-align: center;
   padding: 1rem;
 }
-
-/* ---------- Equipo ---------- */
 .integrante { text-align: center; }
 .avatar {
   width: 120px; height: 120px;
@@ -169,8 +150,6 @@ h1, h2, h3, h4, .navbar-brand, .btn-marco {
 .avatar img { width: 100%; height: 100%; object-fit: cover; }
 .integrante:hover .avatar { transform: rotate(-6deg) scale(1.08); }
 .integrante h3 { color: var(--sakura); margin: 0; }
-
-/* ---------- Acordeón del proceso ---------- */
 .accordion { --bs-accordion-bg: transparent; --bs-accordion-border-color: var(--celeste); }
 .accordion-item { background: rgba(255, 255, 255, .06); color: var(--blanco); border-color: var(--celeste); }
 .accordion-button {
@@ -182,8 +161,6 @@ h1, h2, h3, h4, .navbar-brand, .btn-marco {
 .accordion-button:not(.collapsed) { background: var(--celeste); color: var(--azul-oscuro); box-shadow: none; }
 .accordion-button::after { filter: invert(1); }
 .accordion-button:not(.collapsed)::after { filter: none; }
-
-/* ---------- Pantalla de juego ---------- */
 .pantalla-juego {
   border: 4px solid var(--dorado);
   border-radius: 10px;
@@ -192,8 +169,6 @@ h1, h2, h3, h4, .navbar-brand, .btn-marco {
   box-shadow: 0 0 24px rgba(245, 197, 66, .45);
 }
 .pantalla-juego iframe { border: 0; width: 100%; height: 100%; }
-
-/* ---------- Footer ---------- */
 footer.pie {
   margin-top: 2rem;
   text-align: center;
@@ -201,8 +176,6 @@ footer.pie {
   font-size: .95rem;
 }
 footer.pie span { color: var(--sakura); }
-
-/* ---------- Pétalos de sakura (JS) ---------- */
 .petalo {
   position: fixed;
   top: -30px;
@@ -223,8 +196,6 @@ footer.pie span { color: var(--sakura); }
   html { scroll-behavior: auto; }
   .btn-marco, .avatar { transition: none; }
 }
-
-/* ---------- Responsive: en pantallas chicas se ocultan los marcos ---------- */
 @media (max-width: 991.98px) {
   .marco-lateral { display: none; }
   .contenido { padding: 0 12px 2rem; }
