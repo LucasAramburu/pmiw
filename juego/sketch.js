@@ -2,7 +2,7 @@
 const IMAGEN_PORTADA = "assets/Fondos/AparezcoEnLaPortada.png";
 const IMAGEN_CREDITOS = "assets/Fondos/Hipodromo.png";
 const ARCHIVO_MUSICA = "assets/Musica/UmaMusumeSong.mp3";
-const VOLUMEN_MUSICA = 0.2;
+const VOLUMEN_MUSICA = 0.1;
 const IMAGEN_GIMNASIO = "assets/Fondos/Gimnasio.png";
 const IMAGENES_SACO = [
   "assets/Fondos/SacoBox0.png",
